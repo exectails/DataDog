@@ -123,11 +123,10 @@ namespace DataDog
 				foreach (var fieldDef in type.Fields.Values.OrderBy(a => a.Offset))
 				{
 					var field = obj.Fields[fieldDef.Name];
-					string value;
 
 					switch (fieldDef.VarType)
 					{
-						case DataVarType.Color: value = ("0x" + ((uint)field.Value).ToString("X8")); break;
+						case DataVarType.Color: row.Cells[i++].Value = ((uint)field.Value).ToString("X8"); break;
 						default: row.Cells[i++].Value = field.Value; break;
 					}
 				}

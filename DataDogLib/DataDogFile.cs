@@ -241,7 +241,7 @@ namespace DataDogLib
 				{
 					switch (field.VarType)
 					{
-						case DataVarType.Color: xmlWriter.WriteAttributeString(field.Name, "0x" + ((uint)field.Value).ToString("X8")); break;
+						case DataVarType.Color: xmlWriter.WriteAttributeString(field.Name, ((uint)field.Value).ToString("X8")); break;
 						case DataVarType.Float: xmlWriter.WriteAttributeString(field.Name, ((float)field.Value).ToString("0.0#", CultureInfo.InvariantCulture)); break;
 						default: xmlWriter.WriteAttributeString(field.Name, field.Value.ToString()); break;
 					}
