@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDogLib", "DataDogLib\DataDogLib.csproj", "{666E7D46-00A5-40D4-AF5D-2F4857736247}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDog", "DataDog\DataDog.csproj", "{DDE64F63-6F40-4C61-AAA4-4D6ECE906447}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{666E7D46-00A5-40D4-AF5D-2F4857736247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{666E7D46-00A5-40D4-AF5D-2F4857736247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{666E7D46-00A5-40D4-AF5D-2F4857736247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{666E7D46-00A5-40D4-AF5D-2F4857736247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDE64F63-6F40-4C61-AAA4-4D6ECE906447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE64F63-6F40-4C61-AAA4-4D6ECE906447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE64F63-6F40-4C61-AAA4-4D6ECE906447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE64F63-6F40-4C61-AAA4-4D6ECE906447}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6D25DB3-014A-4714-8827-69931C60641C}
+	EndGlobalSection
+EndGlobal
