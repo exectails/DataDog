@@ -1,7 +1,7 @@
 DataDog
 =============================================================================
 
-Data is a viewer and potential future editor for Mabinogi's .data
+DataDog is a viewer and potential future editor for Mabinogi's .data
 (DataDog) format. It allows you to open and view the files and
 export them to XML, in one or list by list.
 
