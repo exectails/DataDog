@@ -76,9 +76,9 @@
 			this.LblSubTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.LblSubTitle.Location = new System.Drawing.Point(65, 43);
 			this.LblSubTitle.Name = "LblSubTitle";
-			this.LblSubTitle.Size = new System.Drawing.Size(131, 13);
+			this.LblSubTitle.Size = new System.Drawing.Size(182, 13);
 			this.LblSubTitle.TabIndex = 2;
-			this.LblSubTitle.Text = "Mabinogi DataDog Viewer";
+			this.LblSubTitle.Text = "Mabinogi DataDog Viewer and Editor";
 			// 
 			// LblName
 			// 

@@ -17,6 +17,7 @@ namespace DataDogLib
 
 		public Dictionary<string, DataTypeDefinition> Types { get; } = new Dictionary<string, DataTypeDefinition>();
 		public Dictionary<string, DataObjectList> Lists { get; } = new Dictionary<string, DataObjectList>();
+		public string DataDogInfo { get; private set; }
 
 		public static DataDogFile Read(string filePath)
 		{
@@ -52,8 +53,10 @@ namespace DataDogLib
 				var stringBlock = br.ReadBytes(stringsLength);
 				var data = br.ReadBytes(dataSize);
 
-				var dataDogInfo = Encoding.UTF8.GetString(br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position))).TrimEnd('\0');
+				var dataDogInfo = Encoding.GetEncoding("EUC-KR").GetString(br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position))).TrimEnd('\0');
 				var fieldVarTypes = FindVarTypes(dataDogInfo);
+
+				result.DataDogInfo = dataDogInfo;
 
 				var typeMatches = TypesRegex.Matches(typeDefinitions);
 
@@ -190,6 +193,131 @@ namespace DataDogLib
 			return result;
 		}
 
+		public void Write(Stream stream)
+		{
+			var typesSb = new StringBuilder();
+			foreach (var type in this.Types.Values)
+			{
+				typesSb.AppendFormat("{0}%{1}|", type.Name, type.Size);
+			}
+
+			var fieldsSb = new StringBuilder();
+			foreach (var type in this.Types.Values)
+			{
+				foreach (var field in type.Fields.Values)
+				{
+					var readTypeStr = GetReadTypeString(field.ReadType);
+					fieldsSb.AppendFormat("{0}.{1}%{2}{3}{4}|", type.Name, field.Name, field.Offset, readTypeStr, field.Size);
+				}
+			}
+
+			var listsSb = new StringBuilder();
+			var listOffset = 0;
+			foreach (var list in this.Lists.Values)
+			{
+				listsSb.AppendFormat("{0}[{1}]@{2}%{3}|", list.Name, list.Objects.Count, list.Type.Name, listOffset);
+
+				foreach (var obj in list.Objects)
+				{
+					listsSb.AppendFormat("{0}[{1}]@{2}%{3}|", obj.Name, 0, obj.Type.Name, listOffset);
+					listOffset += obj.Type.Size;
+				}
+			}
+
+			var stringsSb = new StringBuilder();
+			var stringOffsets = new Dictionary<string, int>();
+			var index = 0;
+
+			foreach (var list in this.Lists.Values)
+			{
+				foreach (var obj in list.Objects)
+				{
+					foreach (var field in obj.Fields.Values.Where(a => a.VarType == DataVarType.String || a.VarType == DataVarType.Reference))
+					{
+						var str = (string)field.Value;
+						var len = Encoding.GetEncoding("EUC-KR").GetByteCount(str) + 1;
+
+						stringOffsets[str] = index;
+						stringsSb.AppendFormat("{0}\0", (string)field.Value);
+
+						index += len;
+					}
+				}
+			}
+
+			var dataLst = new List<byte>();
+			foreach (var list in this.Lists.Values)
+			{
+				foreach (var obj in list.Objects)
+				{
+					foreach (var field in obj.Fields.Values)
+					{
+						switch (field.VarType)
+						{
+							case DataVarType.Byte:
+								dataLst.Add((byte)field.Value);
+								break;
+
+							case DataVarType.Bool:
+								dataLst.Add((bool)field.Value ? (byte)1 : (byte)0);
+								break;
+
+							case DataVarType.Integer:
+								dataLst.AddRange(BitConverter.GetBytes((int)field.Value));
+								break;
+
+							case DataVarType.Color:
+								dataLst.AddRange(BitConverter.GetBytes((uint)field.Value));
+								break;
+
+							case DataVarType.Float:
+								dataLst.AddRange(BitConverter.GetBytes((float)field.Value));
+								break;
+
+							case DataVarType.String:
+							case DataVarType.Reference:
+								// The reference for "commerceelephant/*/walk"
+								// is different from devCAT's file because
+								// that string exists twice and we simply use
+								// one of them, but the result should be
+								// the same.
+
+								var str = (string)field.Value;
+								var offset = stringOffsets[str];
+								dataLst.AddRange(BitConverter.GetBytes(offset));
+								break;
+						}
+					}
+				}
+			}
+
+			var types = Encoding.GetEncoding("EUC-KR").GetBytes(typesSb.ToString() + '\0');
+			var fields = Encoding.GetEncoding("EUC-KR").GetBytes(fieldsSb.ToString() + '\0');
+			var lists = Encoding.GetEncoding("EUC-KR").GetBytes(listsSb.ToString() + '\0');
+			var strings = Encoding.GetEncoding("EUC-KR").GetBytes(stringsSb.ToString());
+			var data = dataLst.ToArray();
+
+			using (var bw = new BinaryWriter(stream))
+			{
+				bw.WriteString("DDBINFILE2 0  48");
+
+				bw.Write(types.Length + fields.Length + lists.Length + 6 * sizeof(int));
+				bw.Write(strings.Length);
+				bw.Write(data.Length);
+				bw.Write(types.Length);
+				bw.Write(fields.Length);
+				bw.Write(lists.Length);
+
+				bw.Write(types);
+				bw.Write(fields);
+				bw.Write(lists);
+				bw.Write(strings);
+				bw.Write(data);
+
+				bw.WriteString(this.DataDogInfo);
+			}
+		}
+
 		public void ExportXml(string filePath)
 		{
 			var xmlSettings = new XmlWriterSettings();
@@ -261,6 +389,17 @@ namespace DataDogLib
 				case "#": return DataFieldReadType.Bin;
 
 				default: throw new ArgumentException($"Unknown column type '{typeStr}'.");
+			}
+		}
+
+		private static string GetReadTypeString(DataFieldReadType readType)
+		{
+			switch (readType)
+			{
+				case DataFieldReadType.String: return "*";
+				case DataFieldReadType.Bin: return "#";
+
+				default: throw new ArgumentException($"Unknown type '{readType}'.");
 			}
 		}
 
