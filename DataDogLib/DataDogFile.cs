@@ -9,6 +9,9 @@ using System.Xml;
 
 namespace DataDogLib
 {
+	/// <summary>
+	/// Represents a DataDog file from Mabinogi (extension .data).
+	/// </summary>
 	public class DataDogFile
 	{
 		private static readonly Regex TypesRegex = new Regex(@"(?<name>[a-z0-9_]+)%(?<size>[0-9]+)\|", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -19,12 +22,22 @@ namespace DataDogLib
 		public Dictionary<string, DataObjectList> Lists { get; } = new Dictionary<string, DataObjectList>();
 		public string DataDogInfo { get; private set; }
 
+		/// <summary>
+		/// Reads file from given path and returns it.
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <returns></returns>
 		public static DataDogFile Read(string filePath)
 		{
 			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
 				return Read(fs);
 		}
 
+		/// <summary>
+		/// Reads file from given stream and returns it.
+		/// </summary>
+		/// <param name="stream"></param>
+		/// <returns></returns>
 		public static DataDogFile Read(Stream stream)
 		{
 			var result = new DataDogFile();
@@ -193,6 +206,10 @@ namespace DataDogLib
 			return result;
 		}
 
+		/// <summary>
+		/// Writes file to given stream.
+		/// </summary>
+		/// <param name="stream"></param>
 		public void Write(Stream stream)
 		{
 			var typesSb = new StringBuilder();
@@ -318,6 +335,10 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Writes entire file to given path in XML format.
+		/// </summary>
+		/// <param name="filePath"></param>
 		public void ExportXml(string filePath)
 		{
 			var xmlSettings = new XmlWriterSettings();
@@ -338,6 +359,12 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Writes only one of the lists from the file to the given path
+		/// in XML format.
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="listName"></param>
 		public void ExportXml(string filePath, string listName)
 		{
 			if (!this.Lists.ContainsKey(listName))
@@ -356,6 +383,11 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Writes list to XML writer.
+		/// </summary>
+		/// <param name="xmlWriter"></param>
+		/// <param name="list"></param>
 		private void WriteList(XmlWriter xmlWriter, DataObjectList list)
 		{
 			xmlWriter.WriteStartElement(list.Name);
@@ -381,6 +413,11 @@ namespace DataDogLib
 			xmlWriter.WriteEndElement();
 		}
 
+		/// <summary>
+		/// Returns read type based on given string from type definition.
+		/// </summary>
+		/// <param name="typeStr"></param>
+		/// <returns></returns>
 		private static DataFieldReadType GetReadType(string typeStr)
 		{
 			switch (typeStr)
@@ -392,6 +429,11 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Returns string for given read type, to be used in type definition.
+		/// </summary>
+		/// <param name="readType"></param>
+		/// <returns></returns>
 		private static string GetReadTypeString(DataFieldReadType readType)
 		{
 			switch (readType)
@@ -403,6 +445,12 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Returns var type based on given string from field definition.
+		/// </summary>
+		/// <param name="dataDogInfo"></param>
+		/// <param name="varTypeName"></param>
+		/// <returns></returns>
 		private static DataVarType GetVarType(string dataDogInfo, string varTypeName)
 		{
 			switch (varTypeName)
@@ -420,6 +468,11 @@ namespace DataDogLib
 			}
 		}
 
+		/// <summary>
+		/// Searches given info block for variable types and returns them.
+		/// </summary>
+		/// <param name="dataDogInfo"></param>
+		/// <returns></returns>
 		private static Dictionary<string, DataVarType> FindVarTypes(string dataDogInfo)
 		{
 			var result = new Dictionary<string, DataVarType>();

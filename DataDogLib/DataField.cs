@@ -3,12 +3,31 @@ using System.Globalization;
 
 namespace DataDogLib
 {
+	/// <summary>
+	/// Represents a field in and object.
+	/// </summary>
 	public class DataField
 	{
+		/// <summary>
+		/// Returns the field's name.
+		/// </summary>
 		public string Name { get; private set; }
+
+		/// <summary>
+		/// Returns the field's variable type.
+		/// </summary>
 		public DataVarType VarType { get; private set; }
+
+		/// <summary>
+		/// Returns the field's boxed value.
+		/// </summary>
 		public object Value { get; set; }
 
+		/// <summary>
+		/// Creates new instance with Value being set to the type's default.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
 		public DataField(string name, DataVarType type)
 		{
 			this.Name = name;
@@ -16,6 +35,10 @@ namespace DataDogLib
 			this.Value = this.GetDefaultValue();
 		}
 
+		/// <summary>
+		/// Returns the default value for this instance's variable type.
+		/// </summary>
+		/// <returns></returns>
 		public object GetDefaultValue()
 		{
 			switch (this.VarType)
@@ -32,6 +55,11 @@ namespace DataDogLib
 			throw new Exception($"Unknown var type '{this.VarType}'.");
 		}
 
+		/// <summary>
+		/// Returns true if the given string is a valid value for this field.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public bool ValidateStringValue(string value)
 		{
 			switch (this.VarType)

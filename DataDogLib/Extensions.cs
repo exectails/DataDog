@@ -3,6 +3,9 @@ using System.Text;
 
 namespace DataDogLib
 {
+	/// <summary>
+	/// Extensions for BinaryWriter.
+	/// </summary>
 	public static class BinaryWriterExtensions
 	{
 		/// <summary>

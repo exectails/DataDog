@@ -10,6 +10,9 @@ using DataObject = DataDogLib.DataObject;
 
 namespace DataDog
 {
+	/// <summary>
+	/// Main Form.
+	/// </summary>
 	public partial class FrmMain : Form
 	{
 		private readonly string Title;
@@ -17,6 +20,12 @@ namespace DataDog
 		private string _openFilePath;
 		private DataDogFile _openFile;
 
+		private DataObject _validatedObj;
+		private bool _editingCell;
+
+		/// <summary>
+		/// Creates new instance.
+		/// </summary>
 		public FrmMain()
 		{
 			this.InitializeComponent();
@@ -27,6 +36,11 @@ namespace DataDog
 				CultureInfo.InvariantCulture;
 		}
 
+		/// <summary>
+		/// Called when the form is loaded, opens files via arguments.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FrmMain_Load(object sender, EventArgs e)
 		{
 			this.ToolBar.Renderer = new ToolStripRendererNL();
@@ -36,6 +50,11 @@ namespace DataDog
 				this.OpenFile(args[1]);
 		}
 
+		/// <summary>
+		/// Called when the Open button is clicked, opens selected file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnOpen_Click(object sender, EventArgs e)
 		{
 			if (this.OfdDataDog.ShowDialog() != DialogResult.OK)
@@ -45,6 +64,10 @@ namespace DataDog
 			this.OpenFile(filePath);
 		}
 
+		/// <summary>
+		/// Opens file from given path.
+		/// </summary>
+		/// <param name="filePath"></param>
 		private void OpenFile(string filePath)
 		{
 			try
@@ -73,6 +96,12 @@ namespace DataDog
 				this.CboList.SelectedIndex = 1;
 		}
 
+		/// <summary>
+		/// Called when the XML Export button is clicked, exports file
+		/// in XML format to selected path.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnExportXml_Click(object sender, EventArgs e)
 		{
 			if (this.SfdXml.ShowDialog() != DialogResult.OK)
@@ -98,6 +127,11 @@ namespace DataDog
 
 		}
 
+		/// <summary>
+		/// Called when a new list is selected, reloads object list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CboList_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.LstObjects.Columns.Clear();
@@ -140,16 +174,32 @@ namespace DataDog
 			}
 		}
 
+		/// <summary>
+		/// Called when the About button is clicked, opens About form.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnAbout_Click(object sender, EventArgs e)
 		{
 			new FrmAbout().ShowDialog();
 		}
 
+		/// <summary>
+		/// Called when something is dragged onto this form, enables drag
+		/// if it's a file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FrmMain_DragEnter(object sender, DragEventArgs e)
 		{
 			e.Effect = (e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None);
 		}
 
+		/// <summary>
+		/// Called when something is dropped onto form, opens files.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FrmMain_DragDrop(object sender, DragEventArgs e)
 		{
 			var filePaths = e.Data.GetData(DataFormats.FileDrop) as string[];
@@ -159,6 +209,12 @@ namespace DataDog
 			this.OpenFile(filePaths[0]);
 		}
 
+		/// <summary>
+		/// Called when the Save button is clicked, saves file to its
+		/// current path.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnSave_Click(object sender, EventArgs e)
 		{
 			if (_openFile == null)
@@ -183,6 +239,12 @@ namespace DataDog
 			}
 		}
 
+		/// <summary>
+		/// Called when the user ends editing a cell, updates object
+		/// in list and open file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LstObjects_CellEndEdit(object sender, DataGridViewCellEventArgs e)
 		{
 			_editingCell = false;
@@ -245,9 +307,13 @@ namespace DataDog
 			field.Value = newValue;
 		}
 
-		private DataObject _validatedObj;
-		private bool _editingCell;
-
+		/// <summary>
+		/// Called to validate the value of a cell, cancels editing if
+		/// a value that was entered was invalid, such as an empty object
+		/// name or a non-numeric string for an integer field.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LstObjects_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
 		{
 			if (!_editingCell)
@@ -303,6 +369,11 @@ namespace DataDog
 			}
 		}
 
+		/// <summary>
+		/// Returns new row to use in list from object's data.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		private DataGridViewRow GetRowFromObject(DataObject obj)
 		{
 			var row = new DataGridViewRow();
@@ -325,6 +396,12 @@ namespace DataDog
 			return row;
 		}
 
+		/// <summary>
+		/// Called when the Add Object button is clicked, adds an object
+		/// with default values to list and file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnAddObject_Click(object sender, EventArgs e)
 		{
 			var listName = this.CboList.Text;
@@ -351,6 +428,12 @@ namespace DataDog
 			this.LstObjects.CurrentCell = this.LstObjects[0, this.LstObjects.RowCount - 1];
 		}
 
+		/// <summary>
+		/// Called when the Remove Selected Objects button is clicked,
+		/// removes all currently selected objects from list and file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BtnRemoveObject_Click(object sender, EventArgs e)
 		{
 			if (this.LstObjects.SelectedRows.Count == 0)
@@ -376,6 +459,11 @@ namespace DataDog
 				this.LstObjects.Rows.Remove(row);
 		}
 
+		/// <summary>
+		/// Called when a user starts editing a cell.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LstObjects_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
 		{
 			_editingCell = true;
