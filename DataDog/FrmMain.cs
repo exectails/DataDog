@@ -30,7 +30,7 @@ namespace DataDog
 		{
 			this.InitializeComponent();
 			this.Title = this.Text;
-			this.LstObjects.SetDoubleBuffering(true);
+			this.LstObjects.SetDoubleBuffered(true);
 
 			CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture =
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture =
@@ -237,6 +237,16 @@ namespace DataDog
 			{
 				MessageBox.Show("Failed to save file. Error: " + ex, this.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+		}
+
+		/// <summary>
+		/// Called when a user starts editing a cell.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void LstObjects_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+		{
+			_editingCell = true;
 		}
 
 		/// <summary>
@@ -457,16 +467,6 @@ namespace DataDog
 
 			foreach (var row in toRemove)
 				this.LstObjects.Rows.Remove(row);
-		}
-
-		/// <summary>
-		/// Called when a user starts editing a cell.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void LstObjects_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-		{
-			_editingCell = true;
 		}
 	}
 }
