@@ -62,6 +62,7 @@
 			this.LstObjects.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.LstObjects_CellBeginEdit);
 			this.LstObjects.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.LstObjects_CellEndEdit);
 			this.LstObjects.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.LstObjects_CellValidating);
+			this.LstObjects.KeyUp += new System.Windows.Forms.KeyEventHandler(this.LstObjects_KeyUp);
 			// 
 			// ToolBar
 			// 
@@ -186,12 +187,14 @@
 			this.Controls.Add(this.LstObjects);
 			this.Controls.Add(this.ToolBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.KeyPreview = true;
 			this.Name = "FrmMain";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "DataDog";
 			this.Load += new System.EventHandler(this.FrmMain_Load);
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FrmMain_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FrmMain_DragEnter);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyUp);
 			((System.ComponentModel.ISupportInitialize)(this.LstObjects)).EndInit();
 			this.ToolBar.ResumeLayout(false);
 			this.ToolBar.PerformLayout();

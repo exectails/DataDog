@@ -468,5 +468,47 @@ namespace DataDog
 			foreach (var row in toRemove)
 				this.LstObjects.Rows.Remove(row);
 		}
+
+		/// <summary>
+		/// Called when a key is let go on the list, inserts and removes
+		/// objects.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void LstObjects_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (this.LstObjects.IsCurrentCellInEditMode)
+				return;
+
+			if (e.KeyCode == Keys.Delete)
+				this.BtnRemoveObject_Click(null, null);
+			else if (e.KeyCode == Keys.Insert)
+				this.BtnAddObject_Click(null, null);
+		}
+
+		/// <summary>
+		/// Called when a key is let go off, used for global hotkeys.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void FrmMain_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (this.LstObjects.IsCurrentCellInEditMode)
+				return;
+
+			if (e.Control)
+			{
+				// Save
+				if (e.KeyCode == Keys.S)
+				{
+					this.BtnSave_Click(null, null);
+				}
+				// Open
+				else if (e.KeyCode == Keys.O)
+				{
+					this.BtnOpen_Click(null, null);
+				}
+			}
+		}
 	}
 }
