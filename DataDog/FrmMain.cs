@@ -167,6 +167,7 @@ namespace DataDog
 				}
 
 				this.LstObjects.Rows.AddRange(rows);
+				this.LblObjectCount.Text = "Objects: " + rows.Length;
 			}
 			finally
 			{

@@ -44,8 +44,11 @@
 			this.OfdDataDog = new System.Windows.Forms.OpenFileDialog();
 			this.SfdXml = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.LblObjectCount = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.LstObjects)).BeginInit();
 			this.ToolBar.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// LstObjects
@@ -57,7 +60,7 @@
 			this.LstObjects.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.LstObjects.Location = new System.Drawing.Point(0, 25);
 			this.LstObjects.Name = "LstObjects";
-			this.LstObjects.Size = new System.Drawing.Size(800, 425);
+			this.LstObjects.Size = new System.Drawing.Size(800, 412);
 			this.LstObjects.TabIndex = 0;
 			this.LstObjects.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.LstObjects_CellBeginEdit);
 			this.LstObjects.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.LstObjects_CellEndEdit);
@@ -178,13 +181,30 @@
 			// 
 			this.SfdXml.Filter = "XML File|*.xml";
 			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LblObjectCount});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 437);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+			this.statusStrip1.TabIndex = 2;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// LblObjectCount
+			// 
+			this.LblObjectCount.Name = "LblObjectCount";
+			this.LblObjectCount.Size = new System.Drawing.Size(59, 17);
+			this.LblObjectCount.Text = "Objects: 0";
+			// 
 			// FrmMain
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(800, 459);
 			this.Controls.Add(this.LstObjects);
+			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.ToolBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
@@ -198,6 +218,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.LstObjects)).EndInit();
 			this.ToolBar.ResumeLayout(false);
 			this.ToolBar.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -220,6 +242,8 @@
 		private System.Windows.Forms.ToolStripButton BtnAddObject;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripButton BtnRemoveObject;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel LblObjectCount;
 	}
 }
 
