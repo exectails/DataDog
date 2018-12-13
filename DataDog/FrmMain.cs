@@ -1,11 +1,11 @@
-﻿using DataDogLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using DataDogLib;
 using DataObject = DataDogLib.DataObject;
 
 namespace DataDog
@@ -30,6 +30,7 @@ namespace DataDog
 		{
 			this.InitializeComponent();
 			this.Title = this.Text;
+			this.LstObjects.SetDoubleBuffering(true);
 
 			CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture =
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture =
@@ -134,43 +135,42 @@ namespace DataDog
 		/// <param name="e"></param>
 		private void CboList_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.LstObjects.Columns.Clear();
-			this.LstObjects.Rows.Clear();
+			this.LstObjects.BeginUpdate();
 
-			if (this.CboList.SelectedIndex == 0)
-				return;
-
-			var listName = this.CboList.Text;
-			var list = _openFile.Lists[listName];
-			var type = list.Type;
-
-			this.LstObjects.Columns.Add("_ObjName", "_ObjName");
-			foreach (var field in type.Fields.Values.OrderBy(a => a.Offset))
+			try
 			{
-				this.LstObjects.Columns.Add(field.Name, field.Name);
+				this.LstObjects.Columns.Clear();
+				this.LstObjects.Rows.Clear();
+
+				if (this.CboList.SelectedIndex == 0)
+					return;
+
+				var listName = this.CboList.Text;
+				var list = _openFile.Lists[listName];
+				var type = list.Type;
+
+				this.LstObjects.Columns.Add("_ObjName", "_ObjName");
+
+				foreach (var field in type.Fields.Values.OrderBy(a => a.Offset))
+				{
+					this.LstObjects.Columns.Add(field.Name, field.Name);
+				}
+
+				var rows = new DataGridViewRow[list.Objects.Count];
+				var i = 0;
+
+				foreach (var obj in list.Objects)
+				{
+					var row = this.GetRowFromObject(obj);
+					//this.LstObjects.Rows.Add(row);
+					rows[i++] = row;
+				}
+
+				this.LstObjects.Rows.AddRange(rows);
 			}
-
-			foreach (var obj in list.Objects)
+			finally
 			{
-				//var row = new DataGridViewRow();
-				//row.CreateCells(this.LstObjects);
-
-				//row.Cells[0].Value = obj.Name;
-
-				//var i = 1;
-				//foreach (var fieldDef in type.Fields.Values.OrderBy(a => a.Offset))
-				//{
-				//	var field = obj.Fields[fieldDef.Name];
-
-				//	switch (fieldDef.VarType)
-				//	{
-				//		case DataVarType.Color: row.Cells[i++].Value = ((uint)field.Value).ToString("X8"); break;
-				//		default: row.Cells[i++].Value = field.Value; break;
-				//	}
-				//}
-
-				var row = this.GetRowFromObject(obj);
-				this.LstObjects.Rows.Add(row);
+				this.LstObjects.EndUpdate();
 			}
 		}
 

@@ -38,12 +38,12 @@
 			this.BtnExportXml = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.BtnAddObject = new System.Windows.Forms.ToolStripButton();
+			this.BtnRemoveObject = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.BtnAbout = new System.Windows.Forms.ToolStripButton();
 			this.OfdDataDog = new System.Windows.Forms.OpenFileDialog();
 			this.SfdXml = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-			this.BtnRemoveObject = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.LstObjects)).BeginInit();
 			this.ToolBar.SuspendLayout();
 			this.SuspendLayout();
@@ -144,6 +144,16 @@
 			this.BtnAddObject.Text = "Add Object";
 			this.BtnAddObject.Click += new System.EventHandler(this.BtnAddObject_Click);
 			// 
+			// BtnRemoveObject
+			// 
+			this.BtnRemoveObject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnRemoveObject.Image = ((System.Drawing.Image)(resources.GetObject("BtnRemoveObject.Image")));
+			this.BtnRemoveObject.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnRemoveObject.Name = "BtnRemoveObject";
+			this.BtnRemoveObject.Size = new System.Drawing.Size(23, 22);
+			this.BtnRemoveObject.Text = "Remove selected objects";
+			this.BtnRemoveObject.Click += new System.EventHandler(this.BtnRemoveObject_Click);
+			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -166,16 +176,6 @@
 			// SfdXml
 			// 
 			this.SfdXml.Filter = "XML File|*.xml";
-			// 
-			// BtnRemoveObject
-			// 
-			this.BtnRemoveObject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.BtnRemoveObject.Image = ((System.Drawing.Image)(resources.GetObject("BtnRemoveObject.Image")));
-			this.BtnRemoveObject.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.BtnRemoveObject.Name = "BtnRemoveObject";
-			this.BtnRemoveObject.Size = new System.Drawing.Size(23, 22);
-			this.BtnRemoveObject.Text = "Remove selected objects";
-			this.BtnRemoveObject.Click += new System.EventHandler(this.BtnRemoveObject_Click);
 			// 
 			// FrmMain
 			// 
