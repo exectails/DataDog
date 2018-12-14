@@ -399,9 +399,12 @@ namespace DataDog
 
 				switch (fieldDef.VarType)
 				{
-					case DataVarType.Color: row.Cells[i++].Value = ((uint)field.Value).ToString("X8"); break;
-					default: row.Cells[i++].Value = field.Value; break;
+					case DataVarType.Color: row.Cells[i].Value = ((uint)field.Value).ToString("X8"); break;
+					default: row.Cells[i].Value = field.Value; break;
 				}
+
+				//row.Cells[i].ToolTipText = fieldDef.VarType.ToString();
+				i++;
 			}
 
 			return row;
