@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DataDogLib
 {
 	/// <summary>
 	/// Represents a type.
 	/// </summary>
+	[Serializable]
 	public class DataTypeDefinition
 	{
 		/// <summary>

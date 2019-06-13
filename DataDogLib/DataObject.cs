@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataDogLib
@@ -6,6 +7,7 @@ namespace DataDogLib
 	/// <summary>
 	/// Represents an object.
 	/// </summary>
+	[Serializable]
 	public class DataObject
 	{
 		/// <summary>

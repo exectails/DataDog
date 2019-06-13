@@ -485,9 +485,86 @@ namespace DataDog
 				return;
 
 			if (e.KeyCode == Keys.Delete)
+			{
 				this.BtnRemoveObject_Click(null, null);
+			}
 			else if (e.KeyCode == Keys.Insert)
+			{
 				this.BtnAddObject_Click(null, null);
+			}
+			else if (e.KeyCode == Keys.C && e.Control)
+			{
+				this.CopySelectedRowsToClipboard();
+			}
+			else if (e.KeyCode == Keys.V && e.Control)
+			{
+				this.PasteRowsFromClipboard();
+			}
+		}
+
+		/// <summary>
+		/// Copies all currently selected row's objects to the clipboard.
+		/// </summary>
+		private void CopySelectedRowsToClipboard()
+		{
+			if (this.LstObjects.SelectedRows.Count == 0)
+				return;
+
+			var listName = this.CboList.Text;
+			var list = _openFile.Lists[listName];
+
+			var toCopy = new List<DataObject>();
+
+			foreach (DataGridViewRow row in this.LstObjects.SelectedRows)
+			{
+				var objName = row.Cells[0].Value.ToString();
+				var obj = list.Objects.FirstOrDefault(a => a.Name == objName);
+
+				if (obj != null)
+					toCopy.Add(obj);
+			}
+
+			Clipboard.SetData("DataDog.DataObjectArray", toCopy);
+
+			MessageBox.Show(string.Format("Copied {0} object(s) to clipboard.", toCopy.Count), this.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		/// <summary>
+		/// Adds all objects found in the clipboard.
+		/// </summary>
+		private void PasteRowsFromClipboard()
+		{
+			if (!(Clipboard.GetData("DataDog.DataObjectArray") is List<DataObject> copiedObjects) || copiedObjects.Count == 0)
+				return;
+
+			var listName = this.CboList.Text;
+			var list = _openFile.Lists[listName];
+			var type = list.Type;
+
+			foreach (var obj in copiedObjects)
+			{
+				if (list.Objects.Any(a => a.Name == obj.Name))
+				{
+					for (var i = 1; ; ++i)
+					{
+						if (!list.Objects.Any(a => a.Name == obj.Name + i))
+						{
+							obj.Name = obj.Name + i;
+							break;
+						}
+					}
+				}
+
+				var row = this.GetRowFromObject(obj);
+
+				this.LstObjects.Rows.Add(row);
+				list.Objects.Add(obj);
+			}
+
+			this.LstObjects.ClearSelection();
+			this.LstObjects.CurrentCell = this.LstObjects[0, this.LstObjects.RowCount - 1];
+
+			MessageBox.Show(string.Format("Pasted {0} object(s) from clipboard.", copiedObjects.Count), this.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		/// <summary>

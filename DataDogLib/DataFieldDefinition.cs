@@ -5,6 +5,7 @@ namespace DataDogLib
 	/// <summary>
 	/// Represents a field definition for a type.
 	/// </summary>
+	[Serializable]
 	public class DataFieldDefinition
 	{
 		/// <summary>

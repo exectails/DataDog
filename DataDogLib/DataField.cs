@@ -6,6 +6,7 @@ namespace DataDogLib
 	/// <summary>
 	/// Represents a field in and object.
 	/// </summary>
+	[Serializable]
 	public class DataField
 	{
 		/// <summary>
