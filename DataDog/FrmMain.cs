@@ -287,7 +287,7 @@ namespace DataDog
 			switch (field.VarType)
 			{
 				case DataVarType.Bool:
-					newValue = (newValueStr == "true");
+					newValue = string.Compare(newValueStr, "true", true) == 0;
 					break;
 
 				case DataVarType.Byte:
